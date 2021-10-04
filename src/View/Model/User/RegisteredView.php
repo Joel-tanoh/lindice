@@ -71,7 +71,7 @@ HTML;
     {
         return <<<HTML
         <div class="dashboard-box">
-            <h2 class="dashbord-title">{$dashboardTitle}</h2>
+            <h1 class="dashboard-title">{$dashboardTitle}</h1>
         </div>
 HTML;
     }
@@ -279,7 +279,7 @@ HTML;
         }
 
         return <<<HTML
-        <h5 class="mb-3 p-3">Liste des utilisateurs</h5>
+        <h1 class="dashboard-title">Liste des utilisateurs</h1>
         {$form->open()}
             <table class="table table-hover bg-white">
                 {$this->listHead()}

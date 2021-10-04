@@ -42,14 +42,16 @@ HTML;
     public function top()
     {
         return <<<HTML
-        <div class="row d-flex justify-content-center align-items-center my-3">
+        <div class="row d-flex justify-content-center align-items-center my-0 my-md-5">
             <div class="col-12 col-md-9">
                 <div class="advertising top slide-container">
                     <span class="text-muted">Publicité</span>
                     {$this->showImages($this->advertisingEngine->getImages("top"))}
                 </div>
             </div>
-            <div class="col-12 col-md-3 py-3 py-md-0">{$this->newsGif()}</div>
+            <div class="col-12 col-md-3 mx-auto py-3 py-md-0">
+                {$this->newBook()}
+            </div>
         </div>
 HTML;
     }
@@ -125,11 +127,11 @@ HTML;
     /**
      * Permet d'afficher le gif "nouveauté"
      */
-    private function newsGif()
+    private function newBook()
     {
-        $gifSrc = Image::IMG_DIR_URL. "/gifs/gif-nouveau-3.gif" ;
+        $gifSrc = Image::IMG_DIR_URL. "/advertising/book.jpg" ;
         return <<<HTML
-        <a href="{$this->bookLink()}"><img class="img-fluid" src="{$gifSrc}"/></a>
+        <a href="{$this->bookLink()}"><img class="img-fluid mx-auto" src="{$gifSrc}" style="height: 200px;margin: auto" /></a>
 HTML;
     }
 

@@ -70,7 +70,7 @@ HTML;
 
         return <<<HTML
         <section>
-            <h1 class="section-title">LES CATEGORIES</h1>
+            <h1 class="section-title">NOS CATEGORIES</h1>
             <div id="categories-icon-slider" class="owl-carousel owl-theme">
                 {$content}
             </div>
