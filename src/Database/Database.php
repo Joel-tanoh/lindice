@@ -60,6 +60,7 @@ class Database
                 [
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                    PDO::ATTR_PERSISTENT => true // Connexion persistante pour que Windows suppoprte plus de 16 connexions
                 ]
             );
 

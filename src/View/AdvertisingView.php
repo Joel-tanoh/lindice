@@ -140,7 +140,7 @@ HTML;
      */
     private function bookLink()
     {
-        return "https://online.fliphtml5.com/hslef/ljnz/#p=1";
+        return "https://fliphtml5.com/hslef/nklv";
     }
 
 }
