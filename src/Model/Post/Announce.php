@@ -352,7 +352,7 @@ class Announce extends Model
     /**
      * Retourne le prix.
      * 
-     * @param bool $withCurrency Permet de spécifier s'il faut retourner le prix avec la monnaie.
+     * @param bool $withCurrency
      * @return string
      */
     public function getPrice(bool $withCurrency = true)

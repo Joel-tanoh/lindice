@@ -109,13 +109,10 @@ class Registered extends Visitor
 
     /**
      * Retourne le pseudo de l'utilisateur.
-     * @param int $asSlug Permet de retourner le pseudo en version slugifiée.
-     * 
      * @return string
      */
-    public function getPseudo(int $asSlug = 0)
+    public function getPseudo()
     {
-        if ($asSlug) return Utility::slugify($this->pseudo);
         return $this->pseudo;
     }
 
@@ -276,11 +273,12 @@ class Registered extends Visitor
         ];
 
         /** Gestion du pseudo et des images*/
+
         // Si le pseudo ne change pas mais un nouvel avatar est posté
         if ($_POST["pseudo"] === $this->pseudo && Update::fileIsUploaded("avatar")) {
             $imageManager->save($_FILES["avatar"]["tmp_name"], $_POST["pseudo"], Avatar::AVATARS_DIR_PATH, 80, 80);
         }
-        // Si le pseudo change et que l'avatar ne change pas
+        // Sile pseudo change et que l'avatar ne change pas
         elseif ($_POST["pseudo"] !== $this->pseudo && !Update::fileIsUploaded("avatar")) {
             $imageManager->rename($this->avatarPath, Avatar::AVATARS_DIR_PATH . $_POST["pseudo"]);
         }
