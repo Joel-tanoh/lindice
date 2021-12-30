@@ -56,7 +56,7 @@ class Category extends Model
         $query = "SELECT id FROM " . Announce::TABLE_NAME . " WHERE id_category = ?";
 
         if (null !== $status) {
-            $query .= " AND status = ?";
+            $query .= " AND status = ? ORDER BY created_at DESC";
             $req = parent::connectToDb()->prepare($query);
             $req->execute([
                 $this->id,
@@ -64,6 +64,7 @@ class Category extends Model
             ]);
 
         } else {
+            $query .= " ORDER BY created_at DESC";
             $req = parent::connectToDb()->prepare($query);
             $req->execute([$this->id]);
         }
