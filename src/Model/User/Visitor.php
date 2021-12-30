@@ -110,6 +110,18 @@ class Visitor extends User
     }
 
     /**
+     * Permet de retourner le nombre total de visiteur sur l'appli.
+     * @return int
+     */
+    public static function getAllNumber()
+    {
+        $req = parent::connectToDb()->query("SELECT COUNT(session_value) as all_visitors_number FROM " . self::TABLE_NAME);
+        $result = $req->fetch();
+
+        return $result["all_visitors_number"];
+    }
+
+    /**
      * Retourne la liste de tous les visiteurs.
      * 
      * @return array
@@ -125,15 +137,6 @@ class Visitor extends User
         }
 
         return $visitors;
-    }
-
-    /**
-     * Permet de retourner le nombre total de visiteur sur l'appli.
-     * @return int
-     */
-    public static function getAllNumber()
-    {
-        return count(self::getAll());
     }
 
     /**
@@ -248,7 +251,14 @@ class Visitor extends User
      */
     public static function onlineNumber()
     {
-        return count(self::online());
+        $query = "SELECT COUNT(session_value) as online_number FROM " . self::TABLE_NAME . " WHERE last_action_timestamp >= ?";
+        $rep = parent::connectToDb()->prepare($query);
+        $rep->execute([
+            time() - (5*60)
+        ]);
+        $result = $rep->fetch();
+
+        return $result["online_number"];
     }
 
     /**
@@ -264,20 +274,33 @@ class Visitor extends User
         return [];
     }
 
+    /**
+     * Retourne la liste des visiteurs de la journée en cours.
+     */
     public static function getCurrentDayVisitorsList() : array
     {
         return self::getDailyVisitorsList(date('Y-m-d'));
     }
 
-    public static function getCurrentDayVisitorsNumber() : int
+    /**
+     * Retourne le nombre de visite de la journée en cours.
+     */
+    public static function getCurrentDayVisitsNumber() : int
     {
-        return count(self::getDailyVisitorsList(date('Y-m-d')));
+        $query = "SELECT COUNT(session_value) as visits_number FROM " . self::TABLE_NAME . " WHERE DATE(date) = :date";
+        $req = parent::connectToDb()->prepare($query);
+        $req->execute([
+            "date" => date('Y-m-d')
+        ]);
+        $result = $req->fetch();
+
+        return $result["visits_number"];
     }
 
     /**
      * Retourne la liste des visiteurs selon un jour donné.
      * 
-     * @param string $date
+     * @param string $date La date en format Y-m-d.
      */
     public static function getDailyVisitorsList(string $date) : array
     {
@@ -289,8 +312,8 @@ class Visitor extends User
         $result = $req->fetchAll();
 
         $dailyVisitors = [];
-        foreach($result as $v) {
-            $dailyVisitors[] = new self($v["session_value"]);
+        foreach($result as $value) {
+            $dailyVisitors[] = new self($value["session_value"]);
         }
 
         return $dailyVisitors;

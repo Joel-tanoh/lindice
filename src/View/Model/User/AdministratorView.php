@@ -30,11 +30,11 @@ class AdministratorView extends RegisteredView
         $currentDayVisitorsNumberBox = DashboardView::showCurrentDayVisitorsNumber();
         $allVisitorsNumber = DashboardView::showAllVisitorsNumber();
         $publishedPosts = DashboardView::showPublishedPostsNumber();
-        $awaitingPosts = DashboardView::showPendingPostsNumber();
+        $pendingPosts = DashboardView::showPendingPostsNumber();
         $suspendedPosts = DashboardView::showSuspendedPostsNumber();
         $currentDayPostsNumber = DashboardView::showCurrentDayPostsNumber();
         $allPostsNumber = DashboardView::showAllPostsNumber();
-        
+
         $content = <<<HTML
         <h1 class="mb-4">Tableau de Bord</h1>
             <section class="mb-4">
@@ -49,7 +49,7 @@ class AdministratorView extends RegisteredView
                 <h5 class="mb-3">Vos annonces</h5>
                 <div class="row">
                     {$publishedPosts}
-                    {$awaitingPosts}
+                    {$pendingPosts}
                     {$suspendedPosts}
                     {$currentDayPostsNumber}
                     {$allPostsNumber}

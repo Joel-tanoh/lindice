@@ -466,6 +466,9 @@ class Announce extends Model
             if ($nbr) {
                 $query .= " LIMIT $begining, $nbr";
             }
+
+            $query .= " ORDER BY created_at DESC";
+
             $req = parent::connectToDb()->prepare($query);
             $req->execute([$idCategory, $status]);
 
@@ -475,6 +478,9 @@ class Announce extends Model
             if ($nbr) {
                 $query .= " LIMIT $begining, $nbr";
             }
+
+            $query .= " ORDER BY created_at DESC";
+
             $req = parent::connectToDb()->prepare($query);
             $req->execute([$idCategory]);
 
@@ -484,6 +490,8 @@ class Announce extends Model
             if ($nbr) {
                 $query .= " LIMIT $begining, $nbr";
             }
+            $query .= " ORDER BY created_at DESC";
+
             $req = parent::connectToDb()->prepare($query);
             $req->execute([$status]);
 
@@ -492,6 +500,9 @@ class Announce extends Model
             if ($nbr) {
                 $query .= " LIMIT $begining, $nbr";
             }
+
+            $query .= " ORDER BY created_at DESC";
+
             $req = parent::connectToDb()->query($query);
         }
 
@@ -503,6 +514,19 @@ class Announce extends Model
         }
 
         return $announces;
+    }
+
+    /**
+     * Retourne le nombre total d'annonces postées.
+     * 
+     * @return int
+     */
+    public static function getAllNumber()
+    {
+        $query = "SELECT COUNT(id) as announces_number FROM " . self::TABLE_NAME;
+        $req = parent::connectToDb()->query($query);
+        $result = $req->fetch();
+        return $result["announces_number"];
     }
 
     /**
@@ -686,55 +710,15 @@ class Announce extends Model
     }
 
     /**
-     * Retourne les annonces suspendue.
+     * Retourne les annonces suspendues.
+     * 
+     * @param $idCategory On peut spécifier la catégorie des annonces à passer.
      * 
      * @return array
      */
-    public static function getSuspended() : array
+    public static function getSuspended(int $idCategory = null) : array
     {
         $query = "SELECT id FROM ". self::TABLE_NAME . " WHERE status = 0";
-        $req = parent::connectToDb()->query($query);
-
-        $result = $req->fetchAll();
-
-        $announces = [];
-
-        foreach($result as $announce) {
-            $announces[] = new self($announce["id"]);
-        }
-
-        return $announces;
-    }
-
-    /**
-     * Retourne les annonces en pending.
-     * 
-     * @return array
-     */
-    public static function getPending() : array
-    {
-        $query = "SELECT id FROM ". self::TABLE_NAME . " WHERE status = 1";
-        $req = parent::connectToDb()->query($query);
-
-        $result = $req->fetchAll();
-
-        $announces = [];
-
-        foreach($result as $announce) {
-            $announces[] = new self($announce["id"]);
-        }
-
-        return $announces;
-    }
-
-    /**
-     * Retourne les annonces validées.
-     * 
-     * @return array
-     */
-    public static function getValidated(int $idCategory = null) : array
-    {
-        $query = "SELECT id FROM ". self::TABLE_NAME . " WHERE status IN (2, 3) ORDER BY status";
 
         if ($idCategory) {
             $query .= " AND id_category = ?";
@@ -751,6 +735,126 @@ class Announce extends Model
         }
 
         return $announces;
+    }
+
+    /**
+     * Retourne le nombre d'annonces suspendues.
+     * 
+     * @return int
+     */
+    public static function getSuspendedNumber(int $idCategory = null) : int
+    {
+        $query = "SELECT COUNT(id) as suspended_announces FROM ". self::TABLE_NAME . " WHERE status = 0";
+
+        if ($idCategory) {
+            $query .= " AND id_category = ?";
+            $req = parent::connectToDb()->prepare($query);
+            $req->execute([$idCategory]);
+        } else {
+            $req = parent::connectToDb()->query($query);
+        }
+
+        $result = $req->fetch();
+
+        return $result["suspended_announces"];
+    }
+
+    /**
+     * Retourne les annonces en attente.
+     * 
+     * @param $idCategory On peut spécifier la catégorie des annonces à passer.
+     * 
+     * @return array
+     */
+    public static function getPending(int $idCategory = null) : array
+    {
+        $query = "SELECT id FROM ". self::TABLE_NAME . " WHERE status = 1";
+
+        if ($idCategory) {
+            $query .= " AND id_category = ?";
+            $req = parent::connectToDb()->prepare($query);
+            $req->execute([$idCategory]);
+        } else {
+            $req = parent::connectToDb()->query($query);
+        }
+
+        $announces = [];
+
+        foreach($req->fetchAll() as $announce) {
+            $announces[] = new self($announce["id"]);
+        }
+
+        return $announces;
+    }
+
+    /**
+     * Retourne le nombre d'annonces en attente.
+     * 
+     * @return int
+     */
+    public static function getPendingNumber(int $idCategory = null) : int
+    {
+        $query = "SELECT COUNT(id) as pending_announces FROM ". self::TABLE_NAME . " WHERE status = 1";
+
+        if ($idCategory) {
+            $query .= " AND id_category = ?";
+            $req = parent::connectToDb()->prepare($query);
+            $req->execute([$idCategory]);
+        } else {
+            $req = parent::connectToDb()->query($query);
+        }
+
+        $result = $req->fetch();
+
+        return $result["pending_announces"];
+    }
+
+    /**
+     * Retourne les annonces validées.
+     * 
+     * @return array
+     */
+    public static function getValidated(int $idCategory = null) : array
+    {
+        $query = "SELECT id FROM ". self::TABLE_NAME . " WHERE status IN (2, 3) ORDER BY created_at DESC";
+
+        if ($idCategory) {
+            $query .= " AND id_category = ?";
+            $req = parent::connectToDb()->prepare($query);
+            $req->execute([$idCategory]);
+        } else {
+            $req = parent::connectToDb()->query($query);
+        }
+
+        $announces = [];
+
+        foreach($req->fetchAll() as $announce) {
+            $announces[] = new self($announce["id"]);
+        }
+
+        return $announces;
+    }
+
+    /**
+     * Retourne le nombre d'annonces validées.
+     * 
+     * @return int
+     */
+    public static function getValidatedNumber(int $idCategory = null) : int
+    {
+        $query = "SELECT COUNT(id) as validated_announces FROM ". self::TABLE_NAME . " WHERE status IN (2, 3)";
+
+        if ($idCategory) {
+            $query .= " AND id_category = ?";
+            $req = parent::connectToDb()->prepare($query);
+            $req->execute([$idCategory]);
+        } else {
+            $req = parent::connectToDb()->query($query);
+        }
+
+        $result = $req->fetch();
+
+        return $result["validated_announces"];
     }
 
     /**
@@ -902,6 +1006,86 @@ class Announce extends Model
     }
 
     /**
+     * Permet d'incrémenter le nombre de vue.
+     * 
+     * @return bool
+     */
+    public function incrementView()
+    {
+        if ($this->isValidated()) {
+            $req = parent::connectToDb()->prepare("UPDATE " . self::TABLE_NAME . " SET views = views + 1 WHERE id = :id");
+            $req->execute([
+                "id" => $this->id
+            ]);
+    
+            return true;
+        }
+    }
+
+    /**
+     * Retourne la liste des posts fait le jour courrant.
+     * 
+     * @return array
+     */
+    public static function getCurrentDayPosts() : array
+    {
+        $query = "SELECT id FROM " . self::TABLE_NAME . " WHERE DATE(created_at) = :date ORDER BY created_at DESC";
+        $req = parent::connectToDb()->prepare($query);
+        $req->execute([
+            "date" => date("Y-m-d"),
+        ]);
+        $result = $req->fetchAll();
+
+        $currentDayAnnounces = [];
+        foreach($result as $item) {
+            $currentDayAnnounces[] = new self($item["id"]);
+        }
+
+        return $currentDayAnnounces;
+    }
+
+    /**
+     * Retourne le nombre de posts fait le jour courrant.
+     * 
+     * @return int
+     */
+    public static function getCurrentDayPostsNumber() : int
+    {
+        $query = "SELECT COUNT(id) as current_day_posts_number FROM " . self::TABLE_NAME . " WHERE DATE(created_at) = :date";
+        $req = parent::connectToDb()->prepare($query);
+        $req->execute([
+            "date" => date("Y-m-d"),
+        ]);
+        $result = $req->fetch();
+
+        return $result["current_day_posts_number"];
+    }
+
+    /**
+     * Retourne le sujet du mail envoyé lorsque l'announce est validée.
+     * 
+     * @return string
+     */
+    public function validatedAnnounceEmailSubject()
+    {
+        return "Votre annonce $this->title a été validée avec succès.";
+    }
+
+    /**
+     * Retourne le contenu du mail envoyé lorsque l'annonce est validée.
+     * 
+     * @return string
+     */
+    public function validatedAnnounceEmailContent()
+    {
+        $content = <<<HTML
+        Félicitations !
+        Votre annonce avec le titre : {$this->title} a été validée. Elle est maintenant visible par tous les utilisateurs.
+HTML;
+        return MailContentManager::contentFormater($content);
+    }
+
+    /**
      * Message envoyé lorsqu'une mise à jour vient d'être faite.
      * 
      * @return string
@@ -919,64 +1103,6 @@ class Announce extends Model
             <a href="{$this->getLink('all')}">Voir</a>
         </p>
 HTML;
-    }
-
-    /**
-     * Permet d'incrémenter le nombre de vue.
-     * 
-     * @return bool
-     */
-    public function incrementView()
-    {
-        if ($this->isValidated()) {
-            $req = parent::connectToDb()->prepare("UPDATE " . self::TABLE_NAME . " SET views = views + 1 WHERE id = :id");
-            $req->execute([
-                "id" => $this->id
-            ]);
-    
-            return true;
-        }
-    }
-
-    public static function getCurrentDayPosts()
-    {
-        $query = "SELECT id FROM " . self::TABLE_NAME . " WHERE DATE(created_at) = :date";
-        $req = parent::connectToDb()->prepare($query);
-        $req->execute([
-            "date" => date("Y-m-d"),
-        ]);
-        $result = $req->fetchAll();
-
-        $currentDayAnnounces = [];
-        foreach($result as $item) {
-            $currentDayAnnounces[] = new self($item["id"]);
-        }
-
-        return $currentDayAnnounces;
-    }
-
-    /**
-     * Retourne le sujet du mail envoyé lorsque l'announce est validée.
-     * 
-     * @return string
-     */
-    public function validatedAnnounceEmailSubject()
-    {
-        return "Votre annonce $this->title vient d'être validée";
-    }
-
-    /**
-     * Retourne le contenu du mail envoyé lorsque l'annonce est validée.
-     * 
-     * @return string
-     */
-    public function validatedAnnounceEmailContent()
-    {
-        $content = <<<HTML
-        Félicitations !
-        Votre annonce avec le titre : {$this->title} a été validée. Elle est maintenant visible par tous les utilisateurs.
-HTML;
-        return MailContentManager::contentFormater($content);
     }
 
 }
