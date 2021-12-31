@@ -64,7 +64,7 @@ abstract class UserController extends AppController
      * Permet d'afficher toutes les annonces.
      */
     public static function readAnnounces() {
-        $page = new Page("Toutes les annonces &#149; L'indice", UserView::readAnnounces(Announce::getAll(null, "validated")));
+        $page = new Page("Toutes les annonces &#149; L'indice", UserView::readAnnounces(Announce::getByStatus("validated")));
         $page->setDescription(
             "Toutes les announces, Vente, Offre et demande, Toutes vos recherches, vos besoins, vous pouvez les trouver sur L'indice."
         );

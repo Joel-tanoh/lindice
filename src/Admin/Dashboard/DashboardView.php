@@ -99,7 +99,7 @@ class DashboardView
 
         return <<<HTML
         <div class="col-12 col-md-3">
-            <div class="{$boxBgBootstrapClassColor} {$textColor} border p-3 mb-2 rounded">
+            <div class="{$boxBgBootstrapClassColor} {$textColor} p-3 mb-2 rounded">
                 <div class="mb-2">
                     $icon<span class="h1">$kpi</span>
                 </div>

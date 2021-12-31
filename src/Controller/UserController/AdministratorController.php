@@ -39,7 +39,7 @@ abstract class AdministratorController extends RegisteredController
         if (empty($params)) {
             $announces = Announce::getAll();
         } else {
-            $announces = Announce::getAll(null, $params[3]);
+            $announces = Announce::getByStatus($params[3]);
         }
 
         $page = new Page("Administration - Gérer les annonces &#149; L'indice", AdministratorView::readAnnounces($announces));

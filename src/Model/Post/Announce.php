@@ -429,7 +429,7 @@ class Announce extends Model
      */
     public function isValidated() : bool
     {
-        return $this->status === 2 || $this->status === 3;
+        return $this->status === 2 || $this->isPremium();
     }
 
     /**
@@ -445,67 +445,126 @@ class Announce extends Model
      * Retourne un certain nombre d'annonces en fonction des paramètres
      * passés à la méthode.
      * 
-     * @param int $idCategory Pour spécifier qu'on veut des annonces appartenant
-     *                        à une catégorie précise.
-     * @param string $status  Pour spécifier qu'on veut des annonces appartenant à
-     *                        une sous-catégorie précise.
-     * @param int $nbr        Pour spécifier qu'on veut un nombre d'annonces précis.
+     * @param int $nbr      Pour spécifier le nombre d'annonce qu'on veut récupérer.
+     * @param int $begining L'élément à partir duquel on veut récupérer les annonces.
      */
-    public static function getAll(int $idCategory = null, string $status = null, int $begining = null, int $nbr = null)
+    public static function getAll(int $nbr = null, int $begining = null)
     {
-        // Format de la requête à la base.
         $query = "SELECT id FROM " . self::TABLE_NAME;
-        if ($status) {
-            $status = self::convertStatus($status);
+
+        if ($nbr && !$begining) {
+            $query .= " LIMIT $nbr";
+        } elseif ($nbr && $begining) {
+            $query .= " LIMIT $begining, $nbr";
+        }
+        $query .= " ORDER BY created_at DESC";
+
+        $req = parent::connectToDb()->query($query);
+        $result = $req->fetchAll();
+
+        $announces = [];
+        foreach($result as $announce) {
+            $announces[] = new self($announce["id"]);
         }
 
-        // Si on passe une catégorie précise et un status précise.
-        if ($idCategory && $status) {
-            $query .= " WHERE id_category = ? AND status = ?";
-            // Si on spécifie un nombre d'annonces précis
-            if ($nbr) {
-                $query .= " LIMIT $begining, $nbr";
-            }
+        return $announces;
+    }
 
-            $query .= " ORDER BY created_at DESC";
+    /**
+     * Retourne les annonces en fonction de la catégorie.
+     * 
+     * @param int $idCategory   L'Id de la catégorie.
+     * @param int $nbr          Pour spécifier le nombre d'annonce qu'on veut récupérer.
+     * @param int $begining     L'élément à partir duquel on veut récupérer les annonces.
+     * 
+     * @return array
+     */
+    public static function getByCategory(int $idCategory, int $nbr = null, int $begining = null) : array
+    {
+        $query = "SELECT id FROM " . self::TABLE_NAME . " WHERE id_category = :id_category";
+        
+        if ($nbr && !$begining) {
+            $query .= " LIMIT $nbr";
+        } elseif ($nbr && $begining) {
+            $query .= " LIMIT $begining, $nbr";
+        }
+        $query .= " ORDER BY created_at DESC";
+        
+        $req = parent::connectToDb()->prepare($query);
+        $req->execute([
+            "id_category" => $idCategory
+        ]);
+        $result = $req->fetchAll();
 
-            $req = parent::connectToDb()->prepare($query);
-            $req->execute([$idCategory, $status]);
-
-        } elseif ($idCategory && !$status) { // Si on spécifie que la catégorie
-            $query .= " WHERE id_category = ?";
-            // Si on spécifie un nombre d'annonces précis
-            if ($nbr) {
-                $query .= " LIMIT $begining, $nbr";
-            }
-
-            $query .= " ORDER BY created_at DESC";
-
-            $req = parent::connectToDb()->prepare($query);
-            $req->execute([$idCategory]);
-
-        } elseif (!$idCategory && $status) { // Si on spécifie que la sous-catégorie
-            $query .= " WHERE status = ?";
-            // Si on spécifie un nombre d'annonces précis
-            if ($nbr) {
-                $query .= " LIMIT $begining, $nbr";
-            }
-            $query .= " ORDER BY created_at DESC";
-
-            $req = parent::connectToDb()->prepare($query);
-            $req->execute([$status]);
-
-        } else {
-            // Si on spécifie un nombre d'annonces précis
-            if ($nbr) {
-                $query .= " LIMIT $begining, $nbr";
-            }
-
-            $query .= " ORDER BY created_at DESC";
-
-            $req = parent::connectToDb()->query($query);
+        $announces = [];
+        foreach($result as $announce) {
+            $announces[] = new self($announce["id"]);
         }
 
+        return $announces;
+    }
+
+    /**
+     * Retourne la liste des annonces selon le status.
+     * 
+     * @param string    $status     Le statut des annonces en format string.
+     * @param int       $nbr        Pour spécifier le nombre d'annonce qu'on veut récupérer.
+     * @param int       $begining   L'élément à partir duquel on veut récupérer les annonces.
+     * 
+     * @return array
+     */
+    public static function getByStatus(string $status, int $nbr = null, int $begining = null) : array
+    {
+        $query = "SELECT id FROM " . self::TABLE_NAME . " WHERE status = :status";
+
+        if ($nbr && !$begining) {
+            $query .= " LIMIT $nbr";
+        } elseif ($nbr && $begining) {
+            $query .= " LIMIT $begining, $nbr";
+        }
+        $query .= " ORDER BY created_at DESC";
+
+        $req = parent::connectToDb()->prepare($query);
+        $req->execute([
+            "status" => self::convertStatus($status)
+        ]);
+
+        $result = $req->fetchAll();
+
+        $announces = [];
+        foreach($result as $announce) {
+            $announces[] = new self($announce["id"]);
+        }
+
+        return $announces;
+    }
+
+    /**
+     * Retourne une liste d'annonces en fonction d'une catégorie et d'un statut.
+     * 
+     * @param int       $idCategory
+     * @param string    $status
+     * @param int       $nbr        Pour spécifier le nombre d'annonce qu'on veut récupérer.
+     * @param int       $begining   L'élément à partir duquel on veut récupérer les annonces.
+     * 
+     * @return array
+     */
+    public static function getByCategoryAndStatus(int $idCategory, string $status, int $nbr = null, int $begining = null)
+    {
+        $query = "SELECT id FROM " . self::TABLE_NAME . " WHERE id_category = :id_category AND status = :status";
+        
+        if ($nbr && !$begining) {
+            $query .= " LIMIT $nbr";
+        } elseif ($nbr && $begining) {
+            $query .= " LIMIT $begining, $nbr";
+        }
+        $query .= " ORDER BY created_at DESC";
+        
+        $req = self::connectToDb()->prepare($query);
+        $req->execute([
+            "id_category"   => $idCategory
+            , "status"      => self::convertStatus($status)
+        ]);
         $result = $req->fetchAll();
 
         $announces = [];
