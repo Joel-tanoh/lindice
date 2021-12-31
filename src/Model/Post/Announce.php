@@ -446,16 +446,16 @@ class Announce extends Model
      * passés à la méthode.
      * 
      * @param int $nbr      Pour spécifier le nombre d'annonce qu'on veut récupérer.
-     * @param int $begining L'élément à partir duquel on veut récupérer les annonces.
+     * @param int $start    L'élément à partir duquel on veut récupérer les annonces.
      */
-    public static function getAll(int $nbr = null, int $begining = null)
+    public static function getAll(int $nbr = null, int $start = null)
     {
         $query = "SELECT id FROM " . self::TABLE_NAME;
 
-        if ($nbr && !$begining) {
+        if ($nbr && !$start) {
             $query .= " LIMIT $nbr";
-        } elseif ($nbr && $begining) {
-            $query .= " LIMIT $begining, $nbr";
+        } elseif ($nbr && $start) {
+            $query .= " LIMIT $nbr OFFSET $start";
         }
         $query .= " ORDER BY created_at DESC";
 
@@ -475,18 +475,18 @@ class Announce extends Model
      * 
      * @param int $idCategory   L'Id de la catégorie.
      * @param int $nbr          Pour spécifier le nombre d'annonce qu'on veut récupérer.
-     * @param int $begining     L'élément à partir duquel on veut récupérer les annonces.
+     * @param int $start        L'élément à partir duquel on veut récupérer les annonces.
      * 
      * @return array
      */
-    public static function getByCategory(int $idCategory, int $nbr = null, int $begining = null) : array
+    public static function getByCategory(int $idCategory, int $nbr = null, int $start = null) : array
     {
         $query = "SELECT id FROM " . self::TABLE_NAME . " WHERE id_category = :id_category";
         
-        if ($nbr && !$begining) {
+        if ($nbr && !$start) {
             $query .= " LIMIT $nbr";
-        } elseif ($nbr && $begining) {
-            $query .= " LIMIT $begining, $nbr";
+        } elseif ($nbr && $start) {
+            $query .= " LIMIT $nbr OFFSET $start";
         }
         $query .= " ORDER BY created_at DESC";
         
@@ -509,18 +509,18 @@ class Announce extends Model
      * 
      * @param string    $status     Le statut des annonces en format string.
      * @param int       $nbr        Pour spécifier le nombre d'annonce qu'on veut récupérer.
-     * @param int       $begining   L'élément à partir duquel on veut récupérer les annonces.
+     * @param int       $start      L'élément à partir duquel on veut récupérer les annonces.
      * 
      * @return array
      */
-    public static function getByStatus(string $status, int $nbr = null, int $begining = null) : array
+    public static function getByStatus(string $status, int $nbr = null, int $start = null) : array
     {
         $query = "SELECT id FROM " . self::TABLE_NAME . " WHERE status = :status";
 
-        if ($nbr && !$begining) {
+        if ($nbr && !$start) {
             $query .= " LIMIT $nbr";
-        } elseif ($nbr && $begining) {
-            $query .= " LIMIT $begining, $nbr";
+        } elseif ($nbr && $start) {
+            $query .= " LIMIT $nbr OFFSET $start";
         }
         $query .= " ORDER BY created_at DESC";
 
@@ -545,18 +545,18 @@ class Announce extends Model
      * @param int       $idCategory
      * @param string    $status
      * @param int       $nbr        Pour spécifier le nombre d'annonce qu'on veut récupérer.
-     * @param int       $begining   L'élément à partir duquel on veut récupérer les annonces.
+     * @param int       $start      L'élément à partir duquel on veut récupérer les annonces.
      * 
      * @return array
      */
-    public static function getByCategoryAndStatus(int $idCategory, string $status, int $nbr = null, int $begining = null)
+    public static function getByCategoryAndStatus(int $idCategory, string $status, int $nbr = null, int $start = null)
     {
         $query = "SELECT id FROM " . self::TABLE_NAME . " WHERE id_category = :id_category AND status = :status";
         
-        if ($nbr && !$begining) {
+        if ($nbr && !$start) {
             $query .= " LIMIT $nbr";
-        } elseif ($nbr && $begining) {
-            $query .= " LIMIT $begining, $nbr";
+        } elseif ($nbr && $start) {
+            $query .= " LIMIT $nbr OFFSET $start";
         }
         $query .= " ORDER BY created_at DESC";
         
