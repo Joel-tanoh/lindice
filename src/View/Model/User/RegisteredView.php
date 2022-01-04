@@ -305,7 +305,7 @@ HTML;
             <td><a href="{$user->getProfileLink()}">{$user->getName()}</a></td>
             <td>{$user->getFirstNames()}</td>
             <td>{$user->getPseudo()}</th>
-            <td>{$user->getAnnounceNumber()}</th>
+            <td>{$user->getAllPostsNumber()}</th>
             <td>{$user->getEmailAddress()}</td>
             <td>{$user->getStatus()}</td>
             <td>{$user->getRegisteredAt()}</td>

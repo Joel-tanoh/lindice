@@ -28,7 +28,7 @@ class BookLinkView extends View
             </div>
         </div>
         {$form->button("submit", "update-book-link", "Modifier", "btn btn-success mt-1 mb-3", "update-book-link")}
-        <a href="/administration/book-link/delete" class="btn btn-danger mt-1 mb-3">Supprimer</a>
+        <!-- <a href="/administration/book-link/delete" class="btn btn-danger mt-1 mb-3">Supprimer</a> -->
         {$form->close()}
 HTML;
 
