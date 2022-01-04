@@ -3,6 +3,7 @@
 namespace App\View;
 
 use App\File\Image\Image;
+use App\Model\BookLink;
 use App\Utility\AdvertisingEngine;
 
 class AdvertisingView extends View
@@ -130,17 +131,11 @@ HTML;
     private function newBook()
     {
         $gifSrc = Image::IMG_DIR_URL. "/advertising/book.jpg" ;
+        $bookLink = BookLink::getBookLink();
+        
         return <<<HTML
-        <a href="{$this->bookLink()}"><img class="img-fluid mx-auto" src="{$gifSrc}" style="height: 200px;margin: auto" /></a>
+        <a href="{$bookLink}"><img class="img-fluid mx-auto" src="{$gifSrc}" style="height: 200px;margin: auto" /></a>
 HTML;
-    }
-
-    /**
-     * Lien du livre
-     */
-    private function bookLink()
-    {
-        return "https://fliphtml5.com/hslef/nklv";
     }
 
 }

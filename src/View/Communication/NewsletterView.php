@@ -61,12 +61,12 @@ HTML;
     }
 
     /**
-     * Retourne le message d'accueil pour l'utilisateur qui vient de s'enregister
+     * Retourne la notification d'accueil pour l'utilisateur qui vient de s'enregister
      * dans la newsletter.
      * 
      * @return string
      */
-    public static function welcomeMessage()
+    public static function welcomeNotification()
     {
         $content = <<<HTML
         <p>Nous sommes ravis de vous compter parmi nos abonnés. <br>Nous vous tiendrons informé régulièrement des nouveautés.</p>

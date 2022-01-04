@@ -18,15 +18,16 @@ class Category extends Model
     /**
      * Constructeur d'une catégorie.
      * 
-     * @param int $id
+     * @param int|string $id Id de la catégorie.
      */
-    public function __construct(int $id)
+    public function __construct($id)
     {
         $queryFormatter = new SqlQueryFormater();
 
-        $query = $queryFormatter->select(
-            "id, title, slug, created_at, updated_at, description, icon_class"
-            )->from(self::TABLE_NAME)->where("id = ?")->returnQueryString();
+        $query = $queryFormatter->select("id, title, slug, created_at, updated_at, description, icon_class")
+            ->from(self::TABLE_NAME)
+            ->where("id = ?")
+            ->returnQueryString();
 
         $req = parent::connectToDb()->prepare($query);
         $req->execute([$id]);

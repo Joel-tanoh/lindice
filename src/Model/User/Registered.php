@@ -209,7 +209,7 @@ class Registered extends Visitor
      * 
      * @return array
      */
-    public function getAnnounces($status = null)
+    public function getAllPosts($status = null)
     {
         $query = "SELECT id FROM " . Announce::TABLE_NAME . " WHERE user_email_address = ?";
 
@@ -233,13 +233,118 @@ class Registered extends Visitor
 
     /**
      * Permet de compter les annonces postées par l'utilisateur.
-     * @param $status Le status des annonces qu'on veut compter.
      * 
      * @return int
      */
-    public function getAnnounceNumber($status = null)
+    public function getAllPostsNumber()
     {
-        return count($this->getAnnounces($status));
+        $query = "SELECT COUNT(id) as all_user_announces_number FROM " . Announce::TABLE_NAME . " WHERE user_email_address = ?";
+        $req = parent::connectToDb()->prepare($query);
+        $req->execute([$this->emailAddress]);
+        $result = $req->fetch();
+        return $result["all_user_announces_number"];
+    }
+
+    /**
+     * Retourne les posts validées.
+     * 
+     * @return array
+     */
+    public function getValidatedPosts()
+    {
+        $query = "SELECT id FROM " . Announce::TABLE_NAME . " WHERE user_email_address = ?  AND status IN (2, 3)";
+        $req = parent::connectToDb()->prepare($query);
+        $req->execute([$this->emailAddress]);
+
+        $announces = [];
+
+        foreach($req->fetchAll() as $announce) {
+            $announces[] = new Announce((int)$announce["id"]);
+        }
+        
+        return $announces;
+    }
+
+    /**
+     * Retourne le nombre d'annonces validées.
+     * 
+     * @return int
+     */
+    public function getValidatedPostsNumber()
+    {
+        $query = "SELECT COUNT(id) as validated_announces_number FROM " . Announce::TABLE_NAME . " WHERE user_email_address = ? AND status IN (2, 3)";
+        $req = parent::connectToDb()->prepare($query);
+        $req->execute([$this->emailAddress]);
+        $result = $req->fetch();
+        return $result["validated_announces_number"];
+    }
+
+    /**
+     * Retourne la liste des posts en attente.
+     * 
+     * @return array
+     */
+    public function getPendingPosts()
+    {
+        $query = "SELECT id FROM " . Announce::TABLE_NAME . " WHERE user_email_address = ?  AND status = 1";
+        $req = parent::connectToDb()->prepare($query);
+        $req->execute([$this->emailAddress]);
+
+        $announces = [];
+
+        foreach($req->fetchAll() as $announce) {
+            $announces[] = new Announce((int)$announce["id"]);
+        }
+        
+        return $announces;
+    }
+
+    /**
+     * Retourne le nombre d'annonces en attente.
+     * 
+     * @return int
+     */
+    public function getPendingPostsNumber()
+    {
+        $query = "SELECT COUNT(id) as pending_announces_number FROM " . Announce::TABLE_NAME . " WHERE user_email_address = ? AND status = 1";
+        $req = parent::connectToDb()->prepare($query);
+        $req->execute([$this->emailAddress]);
+        $result = $req->fetch();
+        return $result["pending_announces_number"];
+    }
+
+    /**
+     * Retourne la liste des posts suspendues.
+     * 
+     * @return array
+     */
+    public function getSuspendedPosts()
+    {
+        $query = "SELECT id FROM " . Announce::TABLE_NAME . " WHERE user_email_address = ?  AND status = 0";
+        $req = parent::connectToDb()->prepare($query);
+        $req->execute([$this->emailAddress]);
+
+        $announces = [];
+
+        foreach($req->fetchAll() as $announce) {
+            $announces[] = new Announce((int)$announce["id"]);
+        }
+        
+        return $announces;
+    }
+
+    /**
+     * Retourne le nombre d'annonces suspendues.
+     * 
+     * @return int
+     */
+    public function getSuspendedPostsNumber()
+    {
+        $query = "SELECT COUNT(id) as suspended_announces_number FROM " . Announce::TABLE_NAME . " WHERE user_email_address = ? AND status = 0";
+        $req = parent::connectToDb()->prepare($query);
+        $req->execute([$this->emailAddress]);
+        $result = $req->fetch();
+        return $result["suspended_announces_number"];
     }
 
     /**

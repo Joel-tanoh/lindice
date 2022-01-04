@@ -94,7 +94,7 @@ class Password
     }
 
     /**
-     * Retourne les messages d'erreur lors de la validation du mot de passe.
+     * Retourne les notifications d'erreur lors de la validation du mot de passe.
      * 
      * @return array
      */

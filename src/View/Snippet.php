@@ -388,8 +388,8 @@ HTML;
     /**
      * Bloc de code qui s'affiche lorsque l'action menée a échoué.
      * 
-     * @param string $title   Le titre pour indiquer en grand un message.
-     * @param string $content Le message à afficher.
+     * @param string $title   Le titre pour indiquer en grand un notification.
+     * @param string $content Le notification à afficher.
      * @param string $link    Peut être null.
      */
     public static function failed(string $title, string $content, string $linkCaption = null, string $href = null, string $current = null)

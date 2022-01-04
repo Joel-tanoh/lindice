@@ -105,10 +105,10 @@ HTML;
             return <<<HTML
             <nav class="nav-table">
                 <ul>
-                    {$this->dashbaordNavStatus($this->user->getProfileLink()."/posts", "Tous", $this->user->getAnnounceNumber())}
-                    {$this->dashbaordNavStatus($this->user->getProfileLink()."/posts/pending", "En attente", $this->user->getAnnounceNumber("pending"))}
-                    {$this->dashbaordNavStatus($this->user->getProfileLink()."/posts/validated", "Validées", $this->user->getAnnounceNumber("validated"))}
-                    {$this->dashbaordNavStatus($this->user->getProfileLink()."/posts/suspended", "Suspendues", $this->user->getAnnounceNumber("suspended"))}
+                    {$this->dashbaordNavStatus($this->user->getProfileLink()."/posts", "Tous", $this->user->getAllPostsNumber())}
+                    {$this->dashbaordNavStatus($this->user->getProfileLink()."/posts/pending", "En attente", $this->user->getPendingPostsNumber())}
+                    {$this->dashbaordNavStatus($this->user->getProfileLink()."/posts/validated", "Validées", $this->user->getValidatedPostsNumber())}
+                    {$this->dashbaordNavStatus($this->user->getProfileLink()."/posts/suspended", "Suspendues", $this->user->getSuspendedPostsNumber())}
                 </ul>
             </nav>
 HTML;
@@ -116,10 +116,10 @@ HTML;
             return <<<HTML
             <nav class="nav-table">
                 <ul>
-                    {$this->dashbaordNavStatus("/administration/annonces", "Tous", count(Announce::getAll()))}
-                    {$this->dashbaordNavStatus("/administration/annonces/pending", "En attente", count(Announce::getPending()))}
-                    {$this->dashbaordNavStatus("/administration/annonces/validated", "Validées", count(Announce::getValidated()))}
-                    {$this->dashbaordNavStatus("/administration/annonces/suspended", "Suspendues", count(Announce::getSuspended()))}
+                    {$this->dashbaordNavStatus("/administration/annonces", "Tous", Announce::getAllNumber())}
+                    {$this->dashbaordNavStatus("/administration/annonces/pending", "En attente", Announce::getPendingNumber())}
+                    {$this->dashbaordNavStatus("/administration/annonces/validated", "Validées", Announce::getValidatedNumber())}
+                    {$this->dashbaordNavStatus("/administration/annonces/suspended", "Suspendues", Announce::getSuspendedNumber())}
                 </ul>
             </nav>
 HTML;
@@ -261,7 +261,7 @@ HTML;
      */
     public function showMyAnnounces()
     {
-        return (new AnnounceView())->show($this->user->getAnnounces("validated"), "Les annonces de " . $this->user->getFullName());
+        return (new AnnounceView())->show($this->user->getValidatedPosts(), "Les annonces de " . $this->user->getFullName());
     }
 
     /**

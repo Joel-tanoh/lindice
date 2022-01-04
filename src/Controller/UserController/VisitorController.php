@@ -27,7 +27,7 @@ class VisitorController extends UserController
         if (!$validator->getErrors()) {
             if (Newsletter::register($_POST["email_address"])) {
 
-                $email = new MailSender($_POST["email_address"], "Bienvenue sur L'indice.com", NewsletterView::welcomeMessage());
+                $email = new MailSender($_POST["email_address"], "Bienvenue sur L'indice.com", NewsletterView::welcomeNotification());
                 $email->send();
 
                 $page->setMetaTitle("Abonnement à la Newsletter Réussie &#149; L'indice");

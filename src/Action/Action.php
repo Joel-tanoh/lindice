@@ -66,9 +66,6 @@ abstract class Action
      */
     public static function fileIsUploaded(string $key)
     {
-        //echo count($_FILES);
-        //dump($_FILES);
-        //die();
         return !empty($_FILES[$key]["name"][0]);
     }
 

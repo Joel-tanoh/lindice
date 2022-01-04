@@ -291,18 +291,18 @@ class Validator
      * pas de code HTML.
      * 
      * @param string $value    Le nom qu'il faut valider.
-     * @param string $message  Le test à afficher en cas d'erreur.
+     * @param string $notification  Le text à afficher en cas d'erreur.
      * @param string $postName La valeur de l'attribut name dans le
      *                         le formulaire.
      * 
      * @return void
      */
-    public function name(string $value, string $message, string $postName = "name")
+    public function name(string $value, string $notification, string $postName = "name")
     {
         $this->toValidate[$postName] = $value;
 
         if ($this->containsHTML($value)) {
-            $this->errors[$postName] = $message;
+            $this->errors[$postName] = $notification;
         }
     }
   
@@ -329,12 +329,12 @@ class Validator
      * 
      * @return bool
      */
-    public function phoneNumber($name, $var, string $message)
+    public function phoneNumber($name, $var, string $notification)
     {
         $this->toValidate[$name] = $var;
 
         if ($this->containsLetter($var)) {
-            $this->errors[$name] = $message;
+            $this->errors[$name] = $notification;
         }
     }
 
@@ -346,12 +346,12 @@ class Validator
      * @param string $comaparision Le mot ou le signe de la comparaison.
      *                             Exemple : less|more|equal ou <=|=|>=.
      * @param int    $fileNumber   Le nombre de fichier par rapport auquel on fait la comparaison.
-     * @param string $message      Le message à afficher au cas où la condition n'est
+     * @param string $notification      Le notification à afficher au cas où la condition n'est
      *                             pas respectée.
      * 
      * @param 
      */
-    public function fileNumber(string $name, string $comparison, int $fileNumber, string $message)
+    public function fileNumber(string $name, string $comparison, int $fileNumber, string $notification)
     {
         $this->toValidate[$name] = $_FILES[$name]["name"];
 
@@ -364,7 +364,7 @@ class Validator
         }
 
         if (!$condition) {
-            $this->errors[$name] = $message;
+            $this->errors[$name] = $notification;
         }
     }
 
@@ -375,12 +375,12 @@ class Validator
      * @param string $name
      * @param string $extToValidate
      * @param array  $validExtensions
-     * @param string $message
+     * @param string $notification
      */
-    public function fileExtensions(string $name, string $extToValidate, array $validExtensions, string $message)
+    public function fileExtensions(string $name, string $extToValidate, array $validExtensions, string $notification)
     {
         if (!in_array(mb_strtolower($extToValidate), $validExtensions)) {
-            $this->errors[$name] = $message;
+            $this->errors[$name] = $notification;
         }
     }
 
@@ -390,12 +390,12 @@ class Validator
      * @param string $name
      * @param        $fileSize
      * @param array  $validSize
-     * @param string $message
+     * @param string $notification
      */
-    public function fileSize(string $name, $fileSize, $validSize, string $message)
+    public function fileSize(string $name, $fileSize, $validSize, string $notification)
     {
         if ((int)$fileSize > $validSize) {
-            $this->errors[$name] = $message;
+            $this->errors[$name] = $notification;
         }
     }
 

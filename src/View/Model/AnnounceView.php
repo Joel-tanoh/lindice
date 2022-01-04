@@ -49,14 +49,14 @@ HTML;
     /**
      * Vue de la création d'une annonce.
      * 
-     * @param string $message Le message retourné en fonction de l'issue de 
+     * @param string $notification Le notification retourné en fonction de l'issue de 
      *                        l'action.
      * 
      * @return string
      */
-    public function create(string $message = null)
+    public function create(string $notification = null)
     {
-        return parent::administrationTemplate($this->createAnnounceForm(), "Poster une annonce", "Poster une annonce", $message);
+        return parent::administrationTemplate($this->createAnnounceForm(), "Poster une annonce", "Poster une annonce", $notification);
     }
 
     /**
@@ -74,9 +74,9 @@ HTML;
      * 
      * @return string
      */
-    public function update(string $message = null)
+    public function update(string $notification = null)
     {
-        return parent::administrationTemplate($this->createAnnounceForm(), $this->announce->getTitle() . " - Modification", $this->announce->getTitle() . " / Modifier", $message);
+        return parent::administrationTemplate($this->createAnnounceForm(), $this->announce->getTitle() . " - Modification", $this->announce->getTitle() . " / Modifier", $notification);
     }
 
     /**

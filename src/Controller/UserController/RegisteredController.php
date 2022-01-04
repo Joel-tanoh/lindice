@@ -86,7 +86,7 @@ class RegisteredController extends VisitorController
 
             if ($createResult["resultType"] === false) {
                 $page->setMetatitle("Poster une annonce &#149; L'indice");
-                $page->setView((new AnnounceView())->create($createResult["message"]));
+                $page->setView((new AnnounceView())->create($createResult["notification"]));
             } else {
                 $page->setMetatitle("Votre annonce a été créée avec succès &#149; L'indice");
                 $page->setView(
@@ -220,11 +220,15 @@ class RegisteredController extends VisitorController
 
                 if (!in_array($status, Announce::getStatutes())) {
                     $announces = [];
-                } else {
-                    $announces = $user->getAnnounces($status);
+                } elseif ($status === "pending") {
+                    $announces = $user->getPendingPosts();
+                } elseif ($status === "validated") {
+                    $announces = $user->getValidatedPosts();
+                } elseif ($status === "suspended") {
+                    $announces = $user->getSuspendedPosts();
                 }
             } else {
-                $announces = $user->getAnnounces();
+                $announces = $user->getAllPosts();
             }
 
             $title = User::authenticated()->getPseudo() === $user->getPseudo() ? $user->getFullName() . " - Mes annonces" : "Les annonces de " . $user->getFullName();
@@ -271,10 +275,7 @@ class RegisteredController extends VisitorController
      * Controlleur de mise à jour d'un user.
      */
     public static function updateAccount(array $params)
-    {
-        dump($params);
-        die();
-    }
+    {}
 
     /**
      * Controller de gestion de la déconnexion d'un utilisateur authentifié.

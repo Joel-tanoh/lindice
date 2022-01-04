@@ -85,7 +85,7 @@ HTML;
      */
     public function notFoundSearch()
     {
-        $form = new Form("/annonces/search", "form-error-search");
+        $form = new Form("/annonces/search", "form-error-search m-3");
 
         return <<<HTML
         {$form->open()}

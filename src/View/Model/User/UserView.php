@@ -40,11 +40,11 @@ class UserView extends ModelView
     /**
      * Vue pour la création d'un compte.
      * 
-     * @param string $message
+     * @param string $notification
      * 
      * @return string
      */
-    public static function register(string $message = null)
+    public static function register(string $notification = null)
     {
         $snippet = new Snippet;
         $form = new Form($_SERVER["REQUEST_URI"], "login-form");
@@ -56,7 +56,7 @@ class UserView extends ModelView
 
         return <<<HTML
         {$snippet->pageHeader("Je m'inscris", "Inscription")}
-        {$message}
+        {$notification}
         <section class="register section-padding">
             <div class="container">
                 <div class="row justify-content-center">

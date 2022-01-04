@@ -68,6 +68,10 @@ class Announce extends Model
 
         $result = $req->fetch();
 
+        // echo "Ici";
+        // dump($result);
+        // die();
+
         $this->id = $result["id"];
         $this->title = $result["title"];
         $this->description = $result["description"];
@@ -76,7 +80,7 @@ class Announce extends Model
         $this->subCategory = $result["id_sub_category"];
         $this->price = $result["price"];
         $this->userEmailAddress = $result["user_email_address"];
-        $this->owner = new Registered($this->userEmailAddress);
+        $this->owner = new Registered($result["user_email_address"]);
         $this->userToJoin = $result["user_to_join"];
         $this->phoneNumber = $result["phone_number"];
         $this->location = $result["location"];
@@ -647,7 +651,7 @@ class Announce extends Model
      */
     public static function create() : bool
     {
-        $image = new Image();
+        // $image = new Image();
         $data["title"] = htmlspecialchars($_POST["title"]);
         $data["description"] = htmlspecialchars($_POST["description"]);
         $data["id_category"] = htmlspecialchars($_POST["id_category"]);
@@ -676,7 +680,7 @@ class Announce extends Model
         $slug = Utility::slugify($_POST["title"]) . "-" . $currentAnnounce->getId();
         $currentAnnounce->set("slug", $slug, "id", $currentAnnounce->getId());
 
-        $currentAnnounce = new self($insertion->getPDO()->lastInsertId());
+        $currentAnnounce = new self($currentAnnounce->getId()); // On réinstancie l'objet pour récupérer le slug
 
         if (File::fileIsUploaded("images")) {
             $currentAnnounce->saveImages($currentAnnounce->getSlug());
@@ -692,7 +696,7 @@ class Announce extends Model
      */
     public function update()
     {
-        $image = new Image();
+        // $image = new Image();
         $data["title"] = htmlspecialchars($_POST["title"]);
         $data["description"] = htmlspecialchars($_POST["description"]);
         $data["id_category"] = htmlspecialchars($_POST["id_category"]);
@@ -1145,7 +1149,7 @@ HTML;
     }
 
     /**
-     * Message envoyé lorsqu'une mise à jour vient d'être faite.
+     * Notification envoyée lorsqu'une mise à jour vient d'être faite.
      * 
      * @return string
      */

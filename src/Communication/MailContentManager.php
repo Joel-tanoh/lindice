@@ -127,14 +127,14 @@ HTML;
     }
 
     /**
-     * Message d'accueil qui est envoyé par mail lorsque quelqu'un vient de s'inscrire sur
+     * Notification d'accueil qui est envoyé par mail lorsque quelqu'un vient de s'inscrire sur
      * le site.
      * 
      * @param \App\Model\User\Registered $user
      * 
      * @return string
      */
-    public static function welcomeMessage(\App\Model\User\Registered $user)
+    public static function welcomeNotification(\App\Model\User\Registered $user)
     {
         $content = <<<HTML
         <p>Hello {$user->getName()}</p>

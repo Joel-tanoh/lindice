@@ -27,7 +27,7 @@ abstract class NewsletterController extends AppController
         if (!$validator->getErrors()) {
             if (Newsletter::register($_POST["email_address"])) {
                 $email = new MailSender(
-                    $_POST["email_address"], "Bienvenue sur L'indice.com", (new NewsletterView)->welcomeMessage()
+                    $_POST["email_address"], "Bienvenue sur L'indice.com", (new NewsletterView)->welcomeNotification()
                 );
                 if ($email->send()) {
                     $page->setMetaTitle("Abonnement à la Newsletter réussie &#149; L'indice");

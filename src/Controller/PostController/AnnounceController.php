@@ -22,7 +22,7 @@ abstract class AnnounceController extends AppController
     /**
      * Permet de créer une annonce.
      * 
-     * @return array Un champ nomme resultType : true ou false et le message contenant les erreurs
+     * @return array Un champ nomme resultType : true ou false et la notification contenant les erreurs
      *               dans le cas ou le resultType  = false.            
      */
     public static function create()
@@ -33,16 +33,15 @@ abstract class AnnounceController extends AppController
             if (!empty(self::validation(false)->getErrors())) {
                 return [
                     "resultType" => false,
-                    "message" => $htmlNotifier->errorsByToast(self::validation(false)->getErrors(), "danger")
+                    "notification" => $htmlNotifier->errorsByToast(self::validation(false)->getErrors(), "danger")
                 ];
             } elseif (Announce::create()) {
                 return [
                     "resultType" => true,
-                    "message" => null
+                    "notification" => null
                 ];
             }
-
-            // return $htmlNotifier->toast("Enregistrement effectué avec succès", "success");          
+        
         }
     }    
 
@@ -53,15 +52,15 @@ abstract class AnnounceController extends AppController
     public static function update(\App\Model\Post\Announce $announce)
     {
         $htmlNotifier = new NotifyByHTML();
-        $message = null;
+        $notification = null;
         $page = new Page($announce->getTitle() . " - Modification &#149; L'indice", (new AnnounceView($announce))->update());
 
         if (Update::dataPosted()) {
 
             if (!empty(self::validation(true, false)->getErrors())) {
-                $message = $htmlNotifier->errorsByToast(self::validation(true)->getErrors(), "danger");
+                $notification = $htmlNotifier->errorsByToast(self::validation(true)->getErrors(), "danger");
                 $page->setView(
-                    (new AnnounceView($announce))->update($message)
+                    (new AnnounceView($announce))->update($notification)
                 );
 
             } else {

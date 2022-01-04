@@ -135,7 +135,8 @@ HTML;
                     {$sidebar->defineSidebarLink("Voir toutes les annonces", "/administration/annonces", "lni-pencil-alt")}
                     {$sidebar->defineSidebarLink("Gérer les utilisateurs", "/administration/users", "lni-users")}
                     {$sidebar->defineSidebarLink("Ajouter un compte", "/register", "lni-user")}
-                    {$sidebar->defineSidebarLink("Mes annonces", $administrator->getProfileLink(). "/posts", "lni-dashboard")}
+                    {$sidebar->defineSidebarLink("Mes annonces", $administrator->getProfileLink(). "/posts", "lni-empty-file")}
+                    {$sidebar->defineSidebarLink("Le lien du livre", "/administration/book-link", "lni-book")}
                     {$sidebar->defineSidebarLink("Déconnexion", "sign-out", "lni-enter")}
                 </ul>
             </nav>

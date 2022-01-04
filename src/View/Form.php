@@ -383,10 +383,10 @@ HTML;
      * @author Joel
      * @return string [[Description]]
      */
-    public function button(string $type = null, string $name = null,  string $text = null, string $class = null)
+    public function button(string $type = null, string $name = null,  string $text = null, string $class = null, string $value = null)
     {
         return <<<HTML
-		<button type="{$type}" name="{$name}" class="{$class}">{$text}</button>
+		<button type="{$type}" name="{$name}" value={$value} class="{$class}">{$text}</button>
 HTML;
     }
 

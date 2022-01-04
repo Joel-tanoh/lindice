@@ -9,8 +9,8 @@ class PageNotFoundException extends Exception
     /**
      * @param string $messsage
      */
-    public function __construct(string $message)
+    public function __construct(string $notification)
     {
-        parent::__construct($message);
+        parent::__construct($notification);
     }
 }

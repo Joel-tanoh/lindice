@@ -38,8 +38,8 @@ class Email
     /** @var string Le sujet du mail */
     private $subject;
 
-    /** @var string Le message */
-    private $message;
+    /** @var string la notification */
+    private $notification;
 
     /** @var string Le destinateur du mail */
     private $from;
@@ -58,17 +58,17 @@ class Email
      * 
      * @param string|array $destinataire Ceux à qui on envoit le mail.
      * @param string       $subject      Le sujet du mail.
-     * @param string       $message      Le message à envoyer.
+     * @param string       $notification la notification à envoyer.
      * @param string       $from         L'email d'envoie qui apparaitra dans le mail.
      * @param bool         $joinFile     True si le mail contient des fichiers joints.
      * 
      * @return void
      */
-    public function __construct($to, string $subject, string $message, string $from = null, string $separator = "\r\n", bool $joinFile = null)
+    public function __construct($to, string $subject, string $notification, string $from = null, string $separator = "\r\n", bool $joinFile = null)
     {
         $this->to = $to;
         $this->subject = $subject;
-        $this->message = $message;
+        $this->notification = $notification;
         $this->separator = $separator;
         $this->from = $from;
         $this->joinFile = $joinFile;
@@ -94,7 +94,7 @@ class Email
     public function send()
     {
         if (!empty($this->to)) {
-            return mail($this->treatTo(), $this->subject, $this->message, $this->headers);
+            return mail($this->treatTo(), $this->subject, $this->notification, $this->headers);
         }
     }
 
@@ -121,7 +121,7 @@ class Email
      * Permet de traiter les destinataires, si $destinataires est un tableau,
      * les valeurs sont collées en les séparant par ", ".
      * 
-     * @return string[]
+     * @return string
      */
     private function treatTo()
     {

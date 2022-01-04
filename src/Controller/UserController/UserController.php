@@ -76,7 +76,7 @@ abstract class UserController extends AppController
      */
     public static function register()
     {
-        $message = null;
+        $notification = null;
 
         // Si des données sont postées
         if (Action::dataPosted()) {
@@ -144,18 +144,18 @@ abstract class UserController extends AppController
                     $email = new MailSender(
                         $_POST["email_address"],
                         "Bienvenue sur lindice.ci",
-                        MailContentManager::welcomeMessage($user)
+                        MailContentManager::welcomeNotification($user)
                     );
                     $email->send();
 
                     Utility::redirect(User::authenticated()->getProfileLink());
                 }
             } else {
-                $message = (new NotifyByHTML())->errorsByToast($validate->getErrors());
+                $notification = (new NotifyByHTML())->errorsByToast($validate->getErrors());
             }
         }
 
-        $page = new Page("Je crée mon compte &#149; L'indice", UserView::register($message));
+        $page = new Page("Je crée mon compte &#149; L'indice", UserView::register($notification));
         $page->setDescription("");
         $page->show();
     }

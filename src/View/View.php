@@ -51,7 +51,7 @@ HTML;
      * 
      * @return string
      */
-    public static function pageNotFound(string $message, string $current)
+    public static function pageNotFound(string $current)
     {
         $snippet = new Snippet();
         $home = APP_URL;
@@ -67,7 +67,6 @@ HTML;
                             <div class="error-message">
                                 <h2>404</h2>
                                 <h3>Oup's ! Nous n'avons trouvé la page que vous recherchez...</h3>
-                                <p>{$message}</p>
                             </div>
                             {$searchView->notFoundSearch()}
                             <div class="description">
@@ -169,7 +168,7 @@ HTML;
                                 <li>1 - La personne est à l'étranger ou en déplacement à l'étranger.</li>
                                 <li>2 - La personne refuse de vous rencontrer en personne.</li>
                                 <li>3 - Le paiement est fait par Western Union, Money Gram ou par chèque.</li>
-                                <li>4 - Les messages sont dans un langage approximatif (que ce soit en anglais ou en français).</li>
+                                <li>4 - Les notifications sont dans un langage approximatif (que ce soit en anglais ou en français).</li>
                                 <li>5 - Les textes semblent être copiés-collés.</li>
                                 <li>6 - L'affaire semble être trop belle pour être vraie.</li>
                             </ul>
@@ -244,14 +243,14 @@ HTML;
      * @param string $current Le texte qui sera affiché dans le
      * @return string
      */
-    public static function administrationTemplate(string $content, string $title, string $current, string $message = null)
+    public static function administrationTemplate(string $content, string $title, string $current, string $notification = null)
     {
         $snippet = new Snippet;
         $sidebar = new SideBar;
 
         return <<<HTML
         {$snippet->pageHeader($title, $current)}
-        {$message}
+        {$notification}
         <div id="content" class="section-padding">
             <div class="container-fluid">
                 <div class="row">
@@ -292,7 +291,7 @@ HTML;
      * @param string $content Le contenu de la page.
      * @return string
      */
-    public static function sliderWithTopAdvertisingTemplate(string $content, string $message = null)
+    public static function sliderWithTopAdvertisingTemplate(string $content, string $notification = null)
     {
         $snippet = new Snippet();
         $advertising = new AdvertisingView();
@@ -315,18 +314,18 @@ HTML;
      *                        pour situer le visiteur.
      * @param string $current Pour indiquer où on se trouve.
      * @param string $content Le contenu principal de la page.
-     * @param string $message Dans le cas où on veut afficher une notification à l'utilisateur.
+     * @param string $notification Dans le cas où on veut afficher une notification à l'utilisateur.
      * 
      * @return string
      */
-    public static function pageHeaderTemplate(string $title, string $current, string $content, string $message = null)
+    public static function pageHeaderTemplate(string $title, string $current, string $content, string $notification = null)
     {
         $snippet = new Snippet;
 
         return <<<HTML
         {$snippet->pageHeader($title, $current)}
         <section class="section-padding">
-            {$message}
+            {$notification}
             {$content}
         </section>
 HTML;

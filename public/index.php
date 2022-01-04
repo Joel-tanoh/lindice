@@ -32,6 +32,8 @@ try {
     $router->get("/administration", "App\Controller\UserController\AdministratorController@index");
     $router->get("/administration/users", "App\Controller\UserController\AdministratorController@readUsers");
     $router->get("/administration/annonces", "App\Controller\UserController\AdministratorController@administrateAnnounces");
+    $router->get("/administration/book-link", "App\Controller\BookLinkController@showBookLink");
+    // $router->get("/administration/book-link/delete", "App\Controller\BookLinkController@deleteBookLink");
     
     $router->get("/:category", "App\Controller\UserController\UserController@readCategory");
     $router->get("/:1/:2", "App\Controller\AppController@subRouter");
@@ -45,12 +47,13 @@ try {
     $router->post("/forgot-password", "App\Controller\UserController\RegisteredController@forgotPassword");
     $router->post("/newsletters/register", "App\Controller\UserController\VisitorController@registerToNewsletter");
     $router->post("/annonces/search", "App\Controller\UserController\UserController@searchAnnounce");
+    $router->post("/administration/book-link", "App\Controller\BookLinkController@updateBookLink");
     $router->post("/:1/:2", "App\Controller\SearchController@subRouter");
     $router->post("/:1/:2/:3", "App\Controller\AppController@subRouter");
 
     $router->run();
 
 } catch(Exception $e) {
-    $page = new Page("Le leader des petites annonces en Côte d'Ivoire &#149; L'indice", View::pageNotFound($e, "404"));
+    $page = new Page("Le leader des petites annonces en Côte d'Ivoire &#149; L'indice", View::pageNotFound("404"));
     $page->show();
 }
