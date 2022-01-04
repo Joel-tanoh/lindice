@@ -51,7 +51,7 @@ HTML;
      * 
      * @return string
      */
-    public static function pageNotFound(string $current)
+    public static function pageNotFound($e, string $current)
     {
         $snippet = new Snippet();
         $home = APP_URL;
@@ -67,6 +67,7 @@ HTML;
                             <div class="error-message">
                                 <h2>404</h2>
                                 <h3>Oup's ! Nous n'avons trouvé la page que vous recherchez...</h3>
+                                {$e->getMessage()}
                             </div>
                             {$searchView->notFoundSearch()}
                             <div class="description">

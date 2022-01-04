@@ -52,8 +52,8 @@ try {
     $router->post("/:1/:2/:3", "App\Controller\AppController@subRouter");
 
     $router->run();
-
+  
 } catch(Exception $e) {
-    $page = new Page("Le leader des petites annonces en Côte d'Ivoire &#149; L'indice", View::pageNotFound("404"));
+    $page = new Page("Le leader des petites annonces en Côte d'Ivoire &#149; L'indice", View::pageNotFound($e, "404"));
     $page->show();
 }
