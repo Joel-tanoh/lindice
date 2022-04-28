@@ -2,8 +2,6 @@
 
 namespace App\Model\User;
 
-use App\Auth\Authentication;
-use App\Auth\Cookie;
 use App\Utility\Utility;
 use App\Auth\Session;
 use DateTime;
@@ -29,6 +27,11 @@ class Visitor extends User
      */
     const TABLE_NAME = "visitors";
 
+    /** Temps après lequel on considère
+     * qu'un utlisateur n'est plus en ligne
+     */
+    const ONLINE_TIMEOUT = 300;
+
     /**
      * Constructeur.
      * 
@@ -48,7 +51,6 @@ class Visitor extends User
         ]);
 
         $result = $req->fetch();
-
         $this->id = $result["id"];
         $this->sessionId = $result["id"];
         $this->sessionValue = $result["session_value"];
@@ -84,12 +86,24 @@ class Visitor extends User
      */
     public static function manage()
     {
-        if (self::isset()) {
-            $visitor = new self(Session::getVisitor());
+        // dump($_SESSION);
+        // die();
+        if (self::isInitiated()) {
+            $visitor = new self(Session::getVisitorId());
             $visitor->updateLastActionDate();
         } else {
             self::create();
         }
+    }
+
+    /**
+     * Permet de vérifier si une instance de visite existe.
+     * 
+     * @return bool
+     */
+    private static function isInitiated()
+    {
+        return self::sessionValueIssetInDb(Session::getVisitorId()) || self::sessionValueIssetInDb(Session::getRegistered());
     }
 
     /**
@@ -149,7 +163,8 @@ class Visitor extends User
      */
     public function identify(string $sessionValue) : bool
     {
-        $req = parent::connectToDb()->prepare("UPDATE $this->tableName SET session_value = :session_value WHERE id = :id");
+        $req = parent::connectToDb()
+            ->prepare("UPDATE $this->tableName SET session_value = :session_value WHERE id = :id");
         $req->execute([
             "session_value" => $sessionValue,
             "id" => $this->sessionId
@@ -177,17 +192,6 @@ class Visitor extends User
     }
 
     /**
-     * Permet de vérifier si une instance de visite existe.
-     * 
-     * @return bool
-     */
-    private static function isset()
-    {
-        return (Session::visitorActivated() || Session::registeredActivated())
-            && (self::sessionValueIssetInDb(Session::getVisitor()) || self::sessionValueIssetInDb(Session::getRegistered()));
-    }
-
-    /**
      * Enregistre l'id de session et la date dans la base de données.
      * 
      * @param string $sessionValue La valeur de la session.
@@ -196,7 +200,8 @@ class Visitor extends User
      */
     private static function saveVisitorDataInDb(string $sessionValue)
     {
-        $query = "INSERT INTO " . self::TABLE_NAME . "(session_value, last_action_timestamp) VALUES(:session_value, :last_action_timestamp)";
+        $query = "INSERT INTO " . self::TABLE_NAME
+            . "(session_value, last_action_timestamp) VALUES(:session_value, :last_action_timestamp)";
         $req = parent::connectToDb()->prepare($query);
         $req->execute([
             "session_value" => $sessionValue,
@@ -214,7 +219,8 @@ class Visitor extends User
      */
     public static function sessionValueIssetInDb($sessionValue)
     {
-        $req = parent::connectToDb()->prepare("SELECT COUNT(id) as counter FROM " . self::TABLE_NAME . " WHERE session_value = :session_value");
+        $req = parent::connectToDb()
+            ->prepare("SELECT COUNT(id) as counter FROM " . self::TABLE_NAME . " WHERE session_value = :session_value");
         $req->execute([
             "session_value" => $sessionValue
         ]);
@@ -233,16 +239,16 @@ class Visitor extends User
 
         $rep = parent::connectToDb()->prepare($query);
         $rep->execute([
-            time() - (5*60)
+            time() - self::ONLINE_TIMEOUT
         ]);
         $result = $rep->fetchAll();
 
-        $online = [];
-        foreach($result as $v) {
-            $online[] = new self($v["session_value"]);
+        $visitorsOnlines = [];
+        foreach($result as $visitor) {
+            $visitorsOnlines[] = new self($visitor["session_value"]);
         }
 
-        return $online;
+        return $visitorsOnlines;
     }
 
     /**
@@ -269,7 +275,7 @@ class Visitor extends User
      * 
      * @return array
      */
-    public function getVisitorsListByDateInterval(string $firstDate, string $secondDate) : array
+    public function getVisitorIdsListByDateInterval(string $firstDate, string $secondDate) : array
     {
         return [];
     }

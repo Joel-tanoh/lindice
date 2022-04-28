@@ -7,9 +7,9 @@ namespace App\Auth;
  */
 class Session extends Authentication
 {
-    const VISITOR_KEY = "V_AxbjZteKoPflTdjUheXsDtvAjOp";
-    const REGISTERED_KEY = "R_IjnOkpsQuGjnSheOrpSbfZmbgsx";
-    const ADMINISTRATOR_KEY = "A_SasCdHuQuGjceAdeOrpSaSCVuGE";
+    const VISITOR_KEY = "Visitor_AxbjZteKoPflTdjUheXsDtvAjOp";
+    const REGISTERED_KEY = "Registered_IjnOkpsQuGjnSheOrpSbfZmbgsx";
+    const ADMINISTRATOR_KEY = "Admin_SasCdHuQuGjceAdeOrpSaSCVuGE";
 
     /**
      * Initie la variable de session qui permet d'identifier l'utilisateur
@@ -49,7 +49,7 @@ class Session extends Authentication
      */
     public static function registeredActivated()
     {
-        return !empty($_SESSION[self::REGISTERED_KEY]);
+        return isset($_SESSION[self::REGISTERED_KEY]) && !empty($_SESSION[self::REGISTERED_KEY]);
     }
 
     /**
@@ -57,7 +57,7 @@ class Session extends Authentication
      * 
      * @return string
      */
-    public static function getVisitor()
+    public static function getVisitorId()
     {
         if (self::visitorActivated()) {
             return $_SESSION[self::VISITOR_KEY];
