@@ -183,10 +183,10 @@ HTML;
         $appUrl = APP_URL;
 
         return <<<HTML
-            <div>
+            <p style="margin:1.3rem 0">
                 Merci de nous faire confiance pour vos annonces.<br>
-                Aller sur <a href="{$appUrl}">Lindice.ci</a>
-            </div>
+                <a style="text-decoration:none;color:#003956" href="{$appUrl}">Aller sur Lindice.ci</a>
+            </p>
         </div>
 HTML;
     }

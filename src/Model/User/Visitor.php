@@ -16,6 +16,9 @@ class Visitor extends User
     /** @var string Valeur de session */
     protected $sessionValue;
 
+    /** @var string Adresse email de session du visiteur*/
+    protected $sessionEmailAddress;
+
     /** @var string Date de la visite. */
     protected $date;
 
@@ -41,7 +44,7 @@ class Visitor extends User
      */
     public function __construct(string $sessionValue)
     {
-        $query = "SELECT id, session_value, date, last_action_date"
+        $query = "SELECT id, session_value, session_email_address, date, last_action_date"
             . " FROM " . self::TABLE_NAME
             . " WHERE session_value = :session_value";
         
@@ -54,6 +57,7 @@ class Visitor extends User
         $this->id = $result["id"];
         $this->sessionId = $result["id"];
         $this->sessionValue = $result["session_value"];
+        $this->sessionEmailAddress = $result["session_email_address"];
         $this->date = $result["date"];
         $this->lastActionDate = $result["last_action_date"];
         $this->tableName = self::TABLE_NAME;
@@ -86,13 +90,11 @@ class Visitor extends User
      */
     public static function manage()
     {
-        // dump($_SESSION);
-        // die();
-        if (self::isInitiated()) {
+        if (!self::isInitiated()) {
+            self::create();
+        } else {
             $visitor = new self(Session::getVisitorId());
             $visitor->updateLastActionDate();
-        } else {
-            self::create();
         }
     }
 
@@ -103,7 +105,8 @@ class Visitor extends User
      */
     private static function isInitiated()
     {
-        return self::sessionValueIssetInDb(Session::getVisitorId()) || self::sessionValueIssetInDb(Session::getRegistered());
+        // return self::sessionValueIssetInDb(Session::getVisitorId()) || self::sessionValueIssetInDb(Session::getRegistered());
+        return self::sessionValueIssetInDb(Session::getVisitorId());
     }
 
     /**
@@ -157,16 +160,16 @@ class Visitor extends User
      * Permet d'identifier le visiteur en changer son ID de visite inconnu à son arrivée
      * par son adresse email.
      * 
-     * @param string $sessionValue
+     * @param string $sessionEmailAddress
      * 
      * @return bool
      */
-    public function identify(string $sessionValue) : bool
+    public function identify(string $sessionEmailAddress) : bool
     {
         $req = parent::connectToDb()
-            ->prepare("UPDATE $this->tableName SET session_value = :session_value WHERE id = :id");
+            ->prepare("UPDATE $this->tableName SET session_email_address = :session_email_address WHERE id = :id");
         $req->execute([
-            "session_value" => $sessionValue,
+            "session_email_address" => $sessionEmailAddress,
             "id" => $this->sessionId
         ]);
         
@@ -225,7 +228,7 @@ class Visitor extends User
             "session_value" => $sessionValue
         ]);
 
-        return (int)$req->fetch()["counter"] !== 0;
+        return $req->fetch()["counter"] != 0;
     }
 
     /**
@@ -233,7 +236,7 @@ class Visitor extends User
      * 
      * @return array
      */
-    public static function online()
+    public static function onlines()
     {
         $query = "SELECT session_value FROM " . self::TABLE_NAME . " WHERE last_action_timestamp >= ?";
 

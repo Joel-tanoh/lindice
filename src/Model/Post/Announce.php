@@ -377,15 +377,17 @@ class Announce extends Post
         $req = parent::connectToDb()->prepare(
             "SELECT id FROM " . Comment::TABLE_NAME . " WHERE subject_id = :subject_id AND subject_type = :subject_type ORDER BY posted_at DESC limit 0, 1"
         );
+
         $req->execute([
             "subject_id" => $this->id,
             "subject_type" => $this->tableName
         ]);
 
-        $commentId = $req->fetch()["id"];
-
-        if ($commentId) {
-            return new Comment((int)$commentId);
+        if ($req->fetch()) {
+            $commentId = $req->fetch()["id"];
+            if ($commentId) {
+                return new Comment((int)$commentId);
+            }
         }
     }
 
@@ -1118,6 +1120,7 @@ class Announce extends Post
         <p style="font-weight: bold;">Détails : <br>
             Titre : {$this->getTitle()} <br>
             Postée par : {$this->getOwner()->getFullName()}<br>
+            Créée le {$this->createdAt}
         </p>
         {$this->emailButtonAction()}
 HTML;
@@ -1164,6 +1167,7 @@ HTML;
         Titre : {$this->title}.
         Posté le {$this->createdAt}
         Elle est maintenant visible par tous les utilisateurs.
+        {$this->emailButtonAction()}
 HTML;
         return MailContentManager::setContent($content);
     }
@@ -1180,11 +1184,21 @@ HTML;
         <p>
             Titre : {$this->id}<br>
             Postée par : {$this->owner->getEmailAddress()}
+            Date : {$this->createdAt}
         </p>
-        <p>
-            <a href="{$this->getLink('all')}">Voir</a>
-        </p>
+        {$this->emailButtonAction()}
 HTML;
     }
 
+    /**
+     * Affiche un bouton "voir l'annonce" dans la notification par email.
+     */
+    private function emailButtonAction()
+    {
+        return <<<HTML
+        <p>
+            <a style="margin:1.3rem 0;padding:0.7rem;background-color:#FE4A49;border-radius:0.3rem;text-decoration:none;color:white" href="{$this->getLink('all')}">Voir l'annonce</a>
+        </p>
+HTML;
+    }
 }
