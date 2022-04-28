@@ -397,15 +397,17 @@ class Announce extends Model
         $req = parent::connectToDb()->prepare(
             "SELECT id FROM " . Comment::TABLE_NAME . " WHERE subject_id = :subject_id AND subject_type = :subject_type ORDER BY posted_at DESC limit 0, 1"
         );
+
         $req->execute([
             "subject_id" => $this->id,
             "subject_type" => $this->tableName
         ]);
 
-        $commentId = $req->fetch()["id"];
-
-        if ($commentId) {
-            return new Comment((int)$commentId);
+        if ($req->fetch()) {
+            $commentId = $req->fetch()["id"];
+            if ($commentId) {
+                return new Comment((int)$commentId);
+            }
         }
     }
 
@@ -1163,9 +1165,8 @@ HTML;
             Date de mise à jour {$this->getUpdatedAt()}
         </p>
         <p>
-            <a href="{$this->getLink('all')}">Voir</a>
+            <a style="margin:1.3rem 0;padding:0.7rem;background-color:#FE4A49;border-radius:0.3rem;text-decoration:none;color:white" href="{$this->getLink('all')}">Voir l'annonce</a>
         </p>
 HTML;
     }
-
 }
