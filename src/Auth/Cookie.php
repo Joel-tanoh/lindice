@@ -26,7 +26,7 @@ class Cookie extends Authentication
      * 
      * @return string
      */
-    public static function getVisitor()
+    public static function getVisitorId()
     {
         if (!empty($_COOKIE[self::VISITOR_KEY])) {
             return $_COOKIE[self::VISITOR_KEY];
@@ -52,7 +52,7 @@ class Cookie extends Authentication
      */
     public static function visitorSetted()
     {
-        return null !== self::getVisitor();
+        return null !== self::getVisitorId();
     }
 
     /**

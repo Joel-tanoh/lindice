@@ -1119,6 +1119,7 @@ class Announce extends Post
             Titre : {$this->getTitle()} <br>
             Postée par : {$this->getOwner()->getFullName()}<br>
         </p>
+        {$this->emailButtonAction()}
 HTML;
         return MailContentManager::setContent($content);
     }

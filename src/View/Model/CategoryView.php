@@ -3,9 +3,7 @@
 namespace App\View\Model;
 
 use App\Model\Category;
-use App\View\AdvertisingView;
 use App\View\SearchView;
-use App\View\Snippet;
 
 /**
  * Classe de gestion des vues de la partie catégorie.
@@ -43,12 +41,17 @@ HTML;
      */
     public function read()
     {
-        return parent::sliderWithTopAdvertisingTemplate((new AnnounceView())->show($this->category->getAnnounces("validated"), "Catégorie : " . $this->category->getTitle()));
+        return parent::sliderWithTopAdvertisingTemplate(
+            (new AnnounceView())->show(
+                $this->category->getAnnounces("validated")
+                , "Annonces " . $this->category->getTitle()
+            )
+        );
     }
 
     /**
      * Affiche un bloc des catégories avec leurs icones.
-     * Au survol, le bloc change de code.
+     * Au survol, le bloc change de couleur.
      * 
      * @return string
      */
@@ -59,13 +62,18 @@ HTML;
             "app-blue", "gray"
         ];
 
+        $i = 0;
         foreach (Category::getAll(Category::TABLE_NAME) as $category) {
             $content .= $this->trendingCategory(
                 $category->getSlug(),
                 $category->getIconClass(),
                 $category->getTitle(),
-                $colors[random_int(0, count($colors) - 1)] // Génère un nombre aléatoire entre 0 et la longueur du tableau.
+                $colors[$i]
+                // $colors[random_int(0, count($colors) - 1)] // Génère un nombre aléatoire entre 0 et la longueur du tableau.
             );
+            // Si $i = 0, sa valeur passe à 1, sinon elle reste à 0
+            // Pour faire varier les couleurs des icônes 
+            $i = $i == 0 ? $i = 1 : $i = 0; 
         }
 
         return <<<HTML

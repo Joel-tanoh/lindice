@@ -134,7 +134,7 @@ abstract class UserController extends AppController
             // Si aucune erreur
             if ($validate->noErrors()) {
                 if (User::save()) {
-                    (new Visitor(Session::getVisitor()))->identify($_POST["email_address"]);
+                    (new Visitor(Session::getVisitorId()))->identify($_POST["email_address"]);
                     Session::activateRegistered($_POST["email_address"]);
                     Cookie::setRegistered($_POST["email_address"]);
 
