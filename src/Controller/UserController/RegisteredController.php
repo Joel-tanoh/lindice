@@ -160,7 +160,7 @@ class RegisteredController extends VisitorController
             }
 
         } else {
-            throw new Exception("Ressource non trouvée !");
+            throw new Exception();
         }
     }
 

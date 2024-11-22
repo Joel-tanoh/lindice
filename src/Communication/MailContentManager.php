@@ -146,11 +146,9 @@ HTML;
         $foot = self::appEmailFooter();
 
         return <<<HTML
-        <section style="text-align:justify; width:80%;padding:1rem 0">
+        <section style="width:80%;padding:1rem 0">
             {$head}
-            <div style="text-align:justify">
-                {$content}
-            </div>
+            <div>{$content}</div>
             {$foot}
         </section>
 HTML;
@@ -168,7 +166,7 @@ HTML;
         return <<<HTML
         <div style="width:700px; font-family:Arial; padding-left:1.5rem">
             <div>
-                <img src="{$logoSrc}" alt="Logo de L'indice">
+                <img src="{$logoSrc}" alt="L'indice">
             </div>
 HTML;
     }

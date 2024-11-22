@@ -1116,7 +1116,7 @@ class Announce extends Post
     public function newPostMail()
     {
         $content = <<<HTML
-        <p>Une nouvelle announce a été créée.</p>
+        <p>Une nouvelle annonce a été créée.</p>
         <p style="font-weight: bold;">Détails : <br>
             Titre : {$this->getTitle()} <br>
             Postée par : {$this->getOwner()->getFullName()}<br>
@@ -1128,7 +1128,7 @@ HTML;
     }
 
     /**
-     * Le conteu du mail envoyé lorsqu'une annonce est supprimée.
+     * Le contenu du mail envoyé lorsqu'une annonce est supprimée.
      * 
      * @return string
      */
@@ -1165,7 +1165,7 @@ HTML;
         $content = <<<HTML
         Félicitations, votre annonce a été validée ! <br>
         Titre : {$this->title}.
-        Posté le {$this->createdAt}
+        Postée le {$this->createdAt}
         Elle est maintenant visible par tous les utilisateurs.
         {$this->emailButtonAction()}
 HTML;

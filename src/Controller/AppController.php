@@ -58,7 +58,7 @@ abstract class AppController
         }
 
         elseif ($params[1] === "users") {
-
+ 
             if (Model::valueIssetInDB("pseudo", $params[2], User::TABLE_NAME)) {
 
                 if (isset($params[3])) {
@@ -77,7 +77,7 @@ abstract class AppController
                 return UserController::readRegisteredAnnounces($params);
 
             } else {
-                throw new Exception("Ressource non trouvée !");
+                throw new Exception();
             }
         }
         
@@ -111,7 +111,7 @@ abstract class AppController
         }
 
         else {
-            throw new Exception("Ressource non trouvée !");
+            throw new Exception();
         }
     }
 
