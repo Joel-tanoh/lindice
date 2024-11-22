@@ -31,6 +31,8 @@ class Registered extends Visitor
     protected $status;
     protected static $statutes = ["suspended", "activated", "premium"];
     protected $posts = [];
+    protected $avatarPath;
+    protected $avatarSrc;
     const TABLE_NAME = "users";
 
     /** Le nombre de post maximun par mois d'un annonceur simple */
