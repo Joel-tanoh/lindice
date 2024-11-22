@@ -17,6 +17,7 @@ abstract class User extends Model
 {
     protected $code;
     protected $emailAddress;
+    protected $sessionId;
     const TABLE_NAME = "users";
 
     /**
