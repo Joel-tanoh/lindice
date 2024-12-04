@@ -66,10 +66,10 @@ abstract class AdministratorController extends RegisteredController
     /**
      * Controller du profil de l'utilisateur.
      * 
-     * @param \App\Model\User\Registered $user
+     * @param $user
      * @return void
      */
-    public static function readUser(\App\Model\User\Registered $user)
+    public static function readUser($user)
     {
         User::askToAuthenticate("/sign-in");
 

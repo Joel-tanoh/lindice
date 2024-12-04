@@ -43,17 +43,15 @@ abstract class User extends Model
      * Retourne un user grace à son code.
      * 
      * @param string $code
-     * 
-     * @return self
      */
-    public static function getByCode($code) : self
+    public static function getByCode($code)
     {
-        $req = parent::connectToDb()->prepare("SELECT id FROM " . self::TABLE_NAME . " WHERE code = ?");
+        $req = parent::connectToDb()->prepare("SELECT email_address FROM " . self::TABLE_NAME . " WHERE code = ?");
         $req->execute([$code]);
         $user = $req->fetch();
 
-        if ($user["id"]) {
-            return new self($user["id"]);
+        if ($user["email_address"]) {
+            return new Registered($user["email_address"]);
         }
     }
 

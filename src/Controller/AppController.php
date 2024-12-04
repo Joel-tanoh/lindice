@@ -59,7 +59,7 @@ abstract class AppController
 
         elseif ($params[1] === "users") {
  
-            if (Model::valueIssetInDB("pseudo", $params[2], User::TABLE_NAME)) {
+            if (Model::valueIssetInDB("code", $params[2], User::TABLE_NAME)) {
 
                 if (isset($params[3])) {
 

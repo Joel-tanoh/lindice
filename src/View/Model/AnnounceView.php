@@ -889,7 +889,7 @@ HTML;
                     <i class="lni-alarm-clock"></i> {$this->announce->getCreatedAt()}
                 </li>
                 <li>
-                    <a href="users/{$this->announce->getOwner()->getPseudo()}/posts"><i class="lni-user"></i> {$this->announce->getOwner()->getFullName()}</a>
+                    <a href="users/{$this->announce->getOwner()->getCode()}/posts"><i class="lni-user"></i> {$this->announce->getOwner()->getFullName()}</a>
                 </li>
             </ul>
             <div class="listing-bottom">

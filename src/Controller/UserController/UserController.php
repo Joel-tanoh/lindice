@@ -64,9 +64,9 @@ abstract class UserController extends AppController
      * Permet d'afficher toutes les annonces.
      */
     public static function readAnnounces() {
-        $page = new Page("Toutes les annonces &#149; L'indice", UserView::readAnnounces(Announce::getByStatus("validated")));
+        $page = new Page("Toutes les meilleures annonces &#149; L'indice", UserView::readAnnounces(Announce::getByStatus("validated")));
         $page->setDescription(
-            "Toutes les announces, Vente, Offre et demande, Toutes vos recherches, vos besoins, vous pouvez les trouver sur L'indice."
+            "Toutes les announces de Vente, Offre et demande, Toutes vos recherches, vos besoins, vous pouvez les trouver sur L'indice."
         );
         $page->show();
     }
@@ -208,11 +208,11 @@ abstract class UserController extends AppController
      */
     public static function readRegisteredAnnounces(array $params)
     {
-        $user = Registered::getByPseudo($params[2]);
-        $page = new Page("Les meilleures annonces de " . $user->getFullName() . " &#149; L'indice");
+        $user = Registered::getByCode($params[2]);
+        $page = new Page("Les meilleures annonces postées par " . $user->getFullName() . " &#149; L'indice");
         $page->setView(UserView::readRegisteredValidatedAnnounces($user));
         $page->setDescription(
-            ""
+            "Les meilleures annonces postées par " . $user->getFullName() . " &#149; L'indice"
         );
         $page->show();
     }
