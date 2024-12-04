@@ -32,10 +32,12 @@ class Announce extends Post
     private $premiumImgPath;
     private $premiumImgSrc;
     private $productImgPath;
+    private $productInfoImgPath;
     private $productImgSrc;
     private $productInfoImgSrc;
     private $artInFooterImgPath;
     private $artInFooterImgSrc;
+    private $userEmailAddress;
     const TABLE_NAME = "ind_announces";
     const IMG_DIR_PATH = Image::IMG_DIR_PATH . DIRECTORY_SEPARATOR . "productinfo" . DIRECTORY_SEPARATOR;
     const IMG_DIR_URL = Image::IMG_DIR_URL . "/productinfo";
