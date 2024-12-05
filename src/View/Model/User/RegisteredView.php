@@ -261,7 +261,7 @@ HTML;
      */
     public function showMyAnnounces()
     {
-        return (new AnnounceView())->show($this->user->getValidatedPosts(), "Les annonces de " . $this->user->getFullName());
+        return (new AnnounceView())->show($this->user->getValidatedPosts(), "Les meilleures annonces de " . $this->user->getFullName());
     }
 
     /**

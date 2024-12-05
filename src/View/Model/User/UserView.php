@@ -3,8 +3,6 @@
 namespace App\View\Model\User;
 
 use App\Model\Location\Town;
-use App\Model\User\User;
-use App\View\AdvertisingView;
 use App\View\Form;
 use App\View\Model\AnnounceView;
 use App\View\Model\ModelView;
